@@ -9,7 +9,7 @@ use image::open;
 use std::fs::File;
 use std::io::prelude::*;
 
-
+type IMAGE = image::ImageBuffer<image::Rgb<u8>, std::vec::Vec<u8>>;
 
 
 fn main() {
@@ -24,11 +24,13 @@ fn main() {
 
     // extract_image(tshark_analyse);
 
-    let nb_black = read_image();
+    let img = open(r".\captachas\15524.png").expect("can not find the image").into_rgb8();
+
+    let nb_black = read_image(&img);
 
     for i in 0 .. 5
     {
-        get_nb(nb_black[i]);
+        get_nb(nb_black[i], &img, i as u32);
     }
 }
 
@@ -81,10 +83,8 @@ fn extract_image(tshark_analyse: std::process::Output)
 
 /// Count how many black pixels vertically, from row 10 to 20 and adding 20 rows for each number
 /// until 110 th row. The first 10 and last 10 rows are neglected
-fn read_image() -> [u16; 5]
+fn read_image(img : &IMAGE) -> [u16; 5]
 {
-    let img = open(r".\captachas\15524.png").expect("can not find the image").into_rgb8();
-
     let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
 
     let mut first_nb:   u16 = 0;
@@ -165,7 +165,7 @@ fn read_image() -> [u16; 5]
 }
 
 
-fn get_nb(nb_black : u16)
+fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
 {
     match nb_black
     {
@@ -176,57 +176,89 @@ fn get_nb(nb_black : u16)
         15 => println!("7"),
         40 => println!("8"),
         29 => println!("5"),
-        20 => or_0_7_4(),
-        27 => or_1_2_4(),
-        39 => or_9_6(),
-        32 => or_2_8(),
-        31 => or_3_9_6(),
-        22 => or_3_9(),
-        23 => or_5_6(),
-        26 => or_3_8(),
+        20 => or_0_7_4(img, iter),
+        27 => or_1_2_4(img, iter),
+        39 => or_9_6(img, iter),
+        32 => or_2_8(img, iter),
+        31 => or_3_9_6(img, iter),
+        22 => or_3_9(img, iter),
+        23 => or_5_6(img, iter),
+        26 => or_3_8(img, iter),
         _ => println!("unknows nb of black pixel: {}", nb_black)
     }
 }
 
-
-fn or_0_7_4()
+#[allow(unused_variables)]
+fn or_0_7_4(img: &IMAGE, iter:u32)
 {
     println!("either 0 or 7 or 4");
 }
 
 
-fn or_1_2_4()
+#[allow(unused_variables)]
+fn or_1_2_4(img: &IMAGE, iter:u32)
 {
-    println!("either 1 or 2 or 4");
+    let lower_bound = 10 + 20 * iter;
+    let upper_bound = lower_bound + 20;
+
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+
+    let mut first_black = (0, 0);
+
+    'outer: for i in lower_bound .. upper_bound
+    {
+        for j in 0 .. 30
+        {
+            if img.get_pixel(i, j) == &black_pixel
+            {
+                first_black = (i, j);
+                break 'outer;
+            }
+        }
+    }
+
+    if img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel 
+        && img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
+    {
+        print!("1 \t")
+    }
+
+    println!("either 2 or 4 (1)");
 }
 
 
-fn or_2_8()
+#[allow(unused_variables)]
+fn or_2_8(img: &IMAGE, iter:u32)
 {
     println!("either 2 or 8");
 }
 
-fn or_3_9()
+#[allow(unused_variables)]
+fn or_3_9(img: &IMAGE, iter:u32)
 {
     println!("either 3 or 9");
 }
 
-fn or_3_9_6()
+#[allow(unused_variables)]
+fn or_3_9_6(img: &IMAGE, iter:u32)
 {
     println!("either 3 or 9 or 6");
 }
 
-fn or_5_6()
+#[allow(unused_variables)]
+fn or_5_6(img: &IMAGE, iter:u32)
 {
     println!("either 5 or 6");
 }
 
-fn or_3_8()
+#[allow(unused_variables)]
+fn or_3_8(img: &IMAGE, iter:u32)
 {
     println!("either 3 or 8");
 }
 
-fn or_9_6()
+#[allow(unused_variables)]
+fn or_9_6(img: &IMAGE, iter:u32)
 {
     println!("either 9 or 6");
 }
