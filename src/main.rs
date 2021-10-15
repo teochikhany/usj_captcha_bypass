@@ -24,7 +24,7 @@ fn main() {
 
     // extract_image(tshark_analyse);
 
-    let img = open(r".\captachas\5-58865.png").expect("can not find the image").into_rgb8();
+    let img = open(r".\captchas\6-77164.png").expect("can not find the image").into_rgb8();
 
     let nb_black = read_image(&img);
 
@@ -208,7 +208,7 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
         31 => or_3_9_6(img, iter),
         22 => or_3_9(img, iter),
         23 => or_5_6(img, iter),
-        26 => or_3_8(img, iter),
+        26 => or_3_8_7(img, iter),
         _ => println!("unknows nb of black pixel: {}", nb_black)
     }
 }
@@ -223,8 +223,12 @@ fn or_0_7_4(img: &IMAGE, iter:u32)
     {
         print!("4 \t")
     }
+    else if img.get_pixel(first_black.0 + 3, first_black.1 + 3) == &black_pixel 
+    {
+        print!("7 \t")
+    }
 
-    println!("either 0 or 7 or _ (4)");
+    println!("either 0 or _ or _ (4, 7)");
 }
 
 
@@ -320,12 +324,17 @@ fn or_5_6(img: &IMAGE, iter:u32)
 }
 
 
-fn or_3_8(img: &IMAGE, iter:u32)
+fn or_3_8_7(img: &IMAGE, iter:u32)
 {
     let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 1, first_black.1) == &black_pixel 
+    if img.get_pixel(first_black.0 + 5, first_black.1 + 4) == &black_pixel 
+        && img.get_pixel(first_black.0 + 6, first_black.1 + 3) == &black_pixel 
+    {
+        println!("7 \t")
+    }
+    else if img.get_pixel(first_black.0 + 1, first_black.1) == &black_pixel 
     {
         println!("3 \t")
     }
