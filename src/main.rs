@@ -227,8 +227,12 @@ fn or_0_7_4(img: &IMAGE, iter:u32)
     {
         print!("7 \t")
     }
+    else
+    {
+        print!("0 \t")
+    }
 
-    println!("either 0 or _ or _ (4, 7)");
+    println!("either _ or _ or _ (4, 7, 0)");
 }
 
 
