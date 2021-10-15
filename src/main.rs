@@ -24,7 +24,7 @@ fn main() {
 
     // extract_image(tshark_analyse);
 
-    let img = open(r".\captachas\36152.png").expect("can not find the image").into_rgb8();
+    let img = open(r".\captachas\5-58865.png").expect("can not find the image").into_rgb8();
 
     let nb_black = read_image(&img);
 
@@ -233,18 +233,22 @@ fn or_1_2_4(img: &IMAGE, iter:u32)
     let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
+    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &black_pixel
+    {
+        println!("4 \t")
+    }
+    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
         && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
     {
-        print!("1 \t")
+        println!("1 \t")
     }
     else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) != &black_pixel
                 && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
     {
-        print!("2 \t")
+        println!("2 \t")
     }
 
-    println!("either _ or 4 (1, 2)");
+    // println!("either _ or 4 (1, 2)");
 }
 
 
@@ -279,11 +283,21 @@ fn or_3_9_6(img: &IMAGE, iter:u32)
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 5, first_black.1) == &black_pixel 
+        && img.get_pixel(first_black.0 + 5, first_black.1 + 1) != &black_pixel 
     {
-        print!("6 \t")
+        println!("6 \t")
+    }
+    else if img.get_pixel(first_black.0 + 5, first_black.1) == &black_pixel 
+            && img.get_pixel(first_black.0 + 5, first_black.1 + 1) == &black_pixel 
+    {
+        println!("9 \t")
+    }
+    else
+    {
+        println!("3 \t")
     }
 
-    println!("either 3 or 9 or _ (6)");
+    // println!("either 3 or 9 or _ (6)");
 }
 
 
