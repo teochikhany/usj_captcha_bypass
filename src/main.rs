@@ -24,7 +24,7 @@ fn main() {
 
     // extract_image(tshark_analyse);
 
-    let img = open(r".\captachas\15524.png").expect("can not find the image").into_rgb8();
+    let img = open(r".\captachas\36152.png").expect("can not find the image").into_rgb8();
 
     let nb_black = read_image(&img);
 
@@ -165,6 +165,31 @@ fn read_image(img : &IMAGE) -> [u16; 5]
 }
 
 
+fn get_first_pixel(img: &IMAGE, iter:u32) -> (u32, u32)
+{
+    let lower_bound = 10 + 20 * iter;
+    let upper_bound = lower_bound + 20;
+
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+
+    let mut first_black = (0, 0);
+
+    'outer: for i in lower_bound .. upper_bound
+    {
+        for j in 0 .. 30
+        {
+            if img.get_pixel(i, j) == &black_pixel
+            {
+                first_black = (i, j);
+                break 'outer;
+            }
+        }
+    }
+
+    return first_black;
+}
+
+
 fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
 {
     match nb_black
@@ -188,50 +213,58 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
     }
 }
 
-#[allow(unused_variables)]
+
 fn or_0_7_4(img: &IMAGE, iter:u32)
 {
-    println!("either 0 or 7 or 4");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &black_pixel 
+    {
+        print!("4 \t")
+    }
+
+    println!("either 0 or 7 or _ (4)");
 }
 
 
-#[allow(unused_variables)]
 fn or_1_2_4(img: &IMAGE, iter:u32)
 {
-    let lower_bound = 10 + 20 * iter;
-    let upper_bound = lower_bound + 20;
-
     let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
 
-    let mut first_black = (0, 0);
-
-    'outer: for i in lower_bound .. upper_bound
-    {
-        for j in 0 .. 30
-        {
-            if img.get_pixel(i, j) == &black_pixel
-            {
-                first_black = (i, j);
-                break 'outer;
-            }
-        }
-    }
-
-    if img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel 
-        && img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
+    if img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
+        && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
     {
         print!("1 \t")
     }
+    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) != &black_pixel
+                && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
+    {
+        print!("2 \t")
+    }
 
-    println!("either 2 or 4 (1)");
+    println!("either _ or 4 (1, 2)");
 }
 
 
-#[allow(unused_variables)]
 fn or_2_8(img: &IMAGE, iter:u32)
 {
-    println!("either 2 or 8");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0 + 7, first_black.1 + 7) == &black_pixel 
+    {
+        println!("2 \t")
+    }
+    else
+    {
+        println!("8 \t")
+    }
+
+    // println!("either _ or 8 (2)");
 }
+
 
 #[allow(unused_variables)]
 fn or_3_9(img: &IMAGE, iter:u32)
@@ -242,23 +275,68 @@ fn or_3_9(img: &IMAGE, iter:u32)
 #[allow(unused_variables)]
 fn or_3_9_6(img: &IMAGE, iter:u32)
 {
-    println!("either 3 or 9 or 6");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0 + 5, first_black.1) == &black_pixel 
+    {
+        print!("6 \t")
+    }
+
+    println!("either 3 or 9 or _ (6)");
 }
 
-#[allow(unused_variables)]
+
 fn or_5_6(img: &IMAGE, iter:u32)
 {
-    println!("either 5 or 6");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0, first_black.1 + 4) == &black_pixel 
+        && img.get_pixel(first_black.0, first_black.1 + 5) != &black_pixel
+    {
+        println!("5 \t")
+    }
+    else
+    {
+        println!("6 \t")
+    }
+
+    // println!("either _ or 6 (5)");
 }
 
-#[allow(unused_variables)]
+
 fn or_3_8(img: &IMAGE, iter:u32)
 {
-    println!("either 3 or 8");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0 + 1, first_black.1) == &black_pixel 
+    {
+        println!("3 \t")
+    }
+    else
+    {
+        println!("8 \t")
+    }
+
+    // println!("either _ or 8 (3)");
 }
 
-#[allow(unused_variables)]
+
 fn or_9_6(img: &IMAGE, iter:u32)
 {
-    println!("either 9 or 6");
+    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0 + 6, first_black.1 + 1) != &black_pixel 
+    {
+        println!("6 \t")
+    }
+    else
+    {
+        println!("9 \t")
+    }
+
+    // println!("either 9 or 6");
 }
