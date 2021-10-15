@@ -10,6 +10,8 @@ use std::fs::File;
 use std::io::prelude::*;
 
 
+
+
 fn main() {
     
     // println!("Hello, world!");
@@ -32,6 +34,7 @@ fn main() {
 
 /// Start the capture with tshark using the following command :
 ///     .\tshark.exe -i wifi -w AAA.pcap -f "tcp and host 193.227.187.169"
+#[allow(dead_code)]
 fn start_capture()
 {
     let _tshark_capture = Command::new("D:\\Apps\\wireshark\\tshark.exe")
@@ -44,6 +47,7 @@ fn start_capture()
 
 /// Parse the pcap file with tshark using the following command
 /// D:\\Apps\\wireshark\\tshark.exe -r .\BAA.pcap -T json -Y 'http' -x > test.json
+#[allow(dead_code)]
 fn parse_pcap() -> std::process::Output
 {
     return Command::new("D:\\Apps\\wireshark\\tshark.exe")
@@ -55,6 +59,7 @@ fn parse_pcap() -> std::process::Output
 
 /// read the json file parsed from the pcap and 
 /// save the latest image with the dimentions of 120x30
+#[allow(dead_code)]
 fn extract_image(tshark_analyse: std::process::Output)
 {
     let res = str::from_utf8(&tshark_analyse.stdout).expect("could not cast output as utf8");
@@ -73,11 +78,12 @@ fn extract_image(tshark_analyse: std::process::Output)
     file.write_all(&buffer).expect("could not write to file");
 }
 
+
 /// Count how many black pixels vertically, from row 10 to 20 and adding 20 rows for each number
 /// until 110 th row. The first 10 and last 10 rows are neglected
 fn read_image() -> [u16; 5]
 {
-    let img = open("captcha.php.png").expect("can not find the image").into_rgb8();
+    let img = open(r".\captachas\15524.png").expect("can not find the image").into_rgb8();
 
     let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
 
@@ -149,11 +155,11 @@ fn read_image() -> [u16; 5]
         }
     }
 
-    // println!("first: {}", first_nb);
-    // println!("second: {}", second_nb);
-    // println!("third: {}", third_nb);
-    // println!("forth: {}", forth_nb);
-    // println!("fifth: {}", fifth_nb);
+    println!("first: {}", first_nb);
+    println!("second: {}", second_nb);
+    println!("third: {}", third_nb);
+    println!("forth: {}", forth_nb);
+    println!("fifth: {} \n", fifth_nb);
 
     return [first_nb, second_nb, third_nb, forth_nb, fifth_nb];
 }
@@ -169,21 +175,23 @@ fn get_nb(nb_black : u16)
         37 => println!("5"),
         15 => println!("7"),
         40 => println!("8"),
-        39 => println!("9"),
-        20 => or_0_7(),
+        29 => println!("5"),
+        20 => or_0_7_4(),
         27 => or_1_2_4(),
+        39 => or_9_6(),
         32 => or_2_8(),
-        31 => or_3_9(),
+        31 => or_3_9_6(),
         22 => or_3_9(),
         23 => or_5_6(),
+        26 => or_3_8(),
         _ => println!("unknows nb of black pixel: {}", nb_black)
     }
 }
 
 
-fn or_0_7()
+fn or_0_7_4()
 {
-    println!("either 0 or 7");
+    println!("either 0 or 7 or 4");
 }
 
 
@@ -203,7 +211,22 @@ fn or_3_9()
     println!("either 3 or 9");
 }
 
+fn or_3_9_6()
+{
+    println!("either 3 or 9 or 6");
+}
+
 fn or_5_6()
 {
     println!("either 5 or 6");
+}
+
+fn or_3_8()
+{
+    println!("either 3 or 8");
+}
+
+fn or_9_6()
+{
+    println!("either 9 or 6");
 }
