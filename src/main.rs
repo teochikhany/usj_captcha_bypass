@@ -173,6 +173,7 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32) -> &str
         15 => "7",
         40 => "8",
         29 => "5",
+        35 => "4",
         20 => or_0_7_4(img, iter),
         27 => or_1_2_4(img, iter),
         39 => or_9_6(img, iter),
