@@ -18,14 +18,16 @@ fn main() {
     // Getting the image saved in the Clipboard
     let bitmap: Vec<u8> = get_clipboard(formats::Bitmap).expect("Not bitmap format");
 
-    // Create the image on disk and write the clipboard data to it
+    // Create the image on disk 
     let mut file = File::create("test.bmp").expect("Could not create file 'test.bmp' ");
+    
+    // And write the clipboard data to it
     file.write_all(&bitmap).expect("Could not write data into 'test.bmp' ");
     
-    // open the image for processing
+    // open the image as rgb8 for processing
     let img = open("test.bmp").expect("can not find the image").into_rgb8();
 
-    // get an array usize 5, each index indicating the number of 
+    // get an array of length 5, each index indicating the number of 
     // black pixels for each number
     let nb_black = read_image(&img);
 
