@@ -13,6 +13,8 @@ use clipboard_win::{formats, get_clipboard};
 
 type IMAGE = image::ImageBuffer<image::Rgb<u8>, std::vec::Vec<u8>>;
 
+const BLACK_PIXEL: image::Rgb<u8> = image::Rgb([51u8, 51u8, 51u8]);
+
 
 fn main() {
     
@@ -27,13 +29,18 @@ fn main() {
     // extract_image(tshark_analyse);
 
 
-    let bitmap: Vec<u8> = get_clipboard(formats::Bitmap).expect("Not bitmap foramt");
+    // Getting the image saved in the Clipboard
+    let bitmap: Vec<u8> = get_clipboard(formats::Bitmap).expect("Not bitmap format");
 
-    let mut file = File::create("test.bmp").unwrap();
-    file.write_all(&bitmap).unwrap();
+    // Create the image on disk and write the clipboard data to it
+    let mut file = File::create("test.bmp").expect("Could not create file 'test.bmp' ");
+    file.write_all(&bitmap).expect("Could not write data into 'test.bmp' ");
     
+    // open the image for processing
     let img = open("test.bmp").expect("can not find the image").into_rgb8();
 
+    // get an array usize 5, each index indicating the number of 
+    // black pixels for each number
     let nb_black = read_image(&img);
 
     for i in 0 .. 5
@@ -93,7 +100,7 @@ fn extract_image(tshark_analyse: std::process::Output)
 /// until 110 th row. The first 10 and last 10 rows are neglected
 fn read_image(img : &IMAGE) -> [u16; 5]
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
 
     let mut first_nb:   u16 = 0;
     let mut second_nb:  u16 = 0;
@@ -106,7 +113,7 @@ fn read_image(img : &IMAGE) -> [u16; 5]
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 first_nb += 1;
             }
@@ -118,7 +125,7 @@ fn read_image(img : &IMAGE) -> [u16; 5]
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 second_nb += 1;
             }
@@ -130,7 +137,7 @@ fn read_image(img : &IMAGE) -> [u16; 5]
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 third_nb += 1;
             }
@@ -142,7 +149,7 @@ fn read_image(img : &IMAGE) -> [u16; 5]
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 forth_nb += 1;
             }
@@ -155,7 +162,7 @@ fn read_image(img : &IMAGE) -> [u16; 5]
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 // println!("{}, {}", i, j);
                 fifth_nb += 1;
@@ -178,7 +185,7 @@ fn get_first_pixel(img: &IMAGE, iter:u32) -> (u32, u32)
     let lower_bound = 10 + 20 * iter;
     let upper_bound = lower_bound + 20;
 
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
 
     let mut first_black = (0, 0);
 
@@ -186,7 +193,7 @@ fn get_first_pixel(img: &IMAGE, iter:u32) -> (u32, u32)
     {
         for j in 0 .. 30
         {
-            if img.get_pixel(i, j) == &black_pixel
+            if img.get_pixel(i, j) == &BLACK_PIXEL
             {
                 first_black = (i, j);
                 break 'outer;
@@ -224,14 +231,14 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
 
 fn or_0_7_4(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &black_pixel 
+    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &BLACK_PIXEL 
     {
         print!("4 \t")
     }
-    else if img.get_pixel(first_black.0 + 3, first_black.1 + 3) == &black_pixel 
+    else if img.get_pixel(first_black.0 + 3, first_black.1 + 3) == &BLACK_PIXEL 
     {
         print!("7 \t")
     }
@@ -246,20 +253,20 @@ fn or_0_7_4(img: &IMAGE, iter:u32)
 
 fn or_1_2_4(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &black_pixel
+    if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &BLACK_PIXEL
     {
         println!("4 \t")
     }
-    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &black_pixel
-        && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
+    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) == &BLACK_PIXEL
+        && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &BLACK_PIXEL
     {
         println!("1 \t")
     }
-    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) != &black_pixel
-                && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &black_pixel
+    else if img.get_pixel(first_black.0 + 2, first_black.1 - 2) != &BLACK_PIXEL
+                && img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &BLACK_PIXEL
     {
         println!("2 \t")
     }
@@ -270,10 +277,10 @@ fn or_1_2_4(img: &IMAGE, iter:u32)
 
 fn or_2_8(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 7, first_black.1 + 7) == &black_pixel 
+    if img.get_pixel(first_black.0 + 7, first_black.1 + 7) == &BLACK_PIXEL 
     {
         println!("2 \t")
     }
@@ -295,16 +302,16 @@ fn or_3_9(img: &IMAGE, iter:u32)
 #[allow(unused_variables)]
 fn or_3_9_6(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 5, first_black.1) == &black_pixel 
-        && img.get_pixel(first_black.0 + 5, first_black.1 + 1) != &black_pixel 
+    if img.get_pixel(first_black.0 + 5, first_black.1) == &BLACK_PIXEL 
+        && img.get_pixel(first_black.0 + 5, first_black.1 + 1) != &BLACK_PIXEL 
     {
         println!("6 \t")
     }
-    else if img.get_pixel(first_black.0 + 5, first_black.1) == &black_pixel 
-            && img.get_pixel(first_black.0 + 5, first_black.1 + 1) == &black_pixel 
+    else if img.get_pixel(first_black.0 + 5, first_black.1) == &BLACK_PIXEL 
+            && img.get_pixel(first_black.0 + 5, first_black.1 + 1) == &BLACK_PIXEL 
     {
         println!("9 \t")
     }
@@ -319,11 +326,11 @@ fn or_3_9_6(img: &IMAGE, iter:u32)
 
 fn or_5_6(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0, first_black.1 + 4) == &black_pixel 
-        && img.get_pixel(first_black.0, first_black.1 + 5) != &black_pixel
+    if img.get_pixel(first_black.0, first_black.1 + 4) == &BLACK_PIXEL 
+        && img.get_pixel(first_black.0, first_black.1 + 5) != &BLACK_PIXEL
     {
         println!("5 \t")
     }
@@ -338,15 +345,15 @@ fn or_5_6(img: &IMAGE, iter:u32)
 
 fn or_3_8_7(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 5, first_black.1 + 4) == &black_pixel 
-        && img.get_pixel(first_black.0 + 6, first_black.1 + 3) == &black_pixel 
+    if img.get_pixel(first_black.0 + 5, first_black.1 + 4) == &BLACK_PIXEL 
+        && img.get_pixel(first_black.0 + 6, first_black.1 + 3) == &BLACK_PIXEL 
     {
         println!("7 \t")
     }
-    else if img.get_pixel(first_black.0 + 1, first_black.1) == &black_pixel 
+    else if img.get_pixel(first_black.0 + 1, first_black.1) == &BLACK_PIXEL 
     {
         println!("3 \t")
     }
@@ -361,10 +368,10 @@ fn or_3_8_7(img: &IMAGE, iter:u32)
 
 fn or_9_6(img: &IMAGE, iter:u32)
 {
-    let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
+    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 6, first_black.1 + 1) != &black_pixel 
+    if img.get_pixel(first_black.0 + 6, first_black.1 + 1) != &BLACK_PIXEL 
     {
         println!("6 \t")
     }
