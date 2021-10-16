@@ -4,7 +4,6 @@ use image::open;
 use std::fs::File;
 use std::io::prelude::*;
 
-#[allow(unused_imports)]
 use clipboard_win::{formats, get_clipboard, set_clipboard_string};
 
 /// just an alias to simplify image parameters
@@ -39,6 +38,8 @@ fn main() {
     }
 
     println!("result: {}", result);
+
+    set_clipboard_string(&result).expect("could not save result into clipboard");
 }
 
 
