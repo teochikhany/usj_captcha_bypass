@@ -452,5 +452,15 @@ mod captcha
         assert_eq!(result, "07692");
     }
 
+    #[test]
+    fn _11_32628()
+    {
+        let img = open(r".\captchas\11-32628.png").expect("can not find the image").into_rgb8();
+
+        let result = _main(img);
+
+        assert_eq!(result, "32628");
+    }
+
     
 }
