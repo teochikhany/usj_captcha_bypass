@@ -8,6 +8,8 @@ use std::time::Duration;
 use image::open;
 use std::fs::File;
 use std::io::prelude::*;
+use clipboard_win::{formats, get_clipboard};
+// use image::{RgbImage, Rgb, ImageFormat};
 
 type IMAGE = image::ImageBuffer<image::Rgb<u8>, std::vec::Vec<u8>>;
 
@@ -24,7 +26,13 @@ fn main() {
 
     // extract_image(tshark_analyse);
 
-    let img = open(r".\captchas\6-77164.png").expect("can not find the image").into_rgb8();
+
+    let bitmap: Vec<u8> = get_clipboard(formats::Bitmap).expect("Not bitmap foramt");
+
+    let mut file = File::create("test.bmp").unwrap();
+    file.write_all(&bitmap).unwrap();
+    
+    let img = open("test.bmp").expect("can not find the image").into_rgb8();
 
     let nb_black = read_image(&img);
 
