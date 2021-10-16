@@ -256,8 +256,8 @@ fn or_3_9_6(img: &IMAGE, iter:u32) -> &str
 {
     let first_black = get_first_pixel(img, iter);
 
-    if img.get_pixel(first_black.0 + 5, first_black.1) == &BLACK_PIXEL 
-        && img.get_pixel(first_black.0 + 5, first_black.1 + 1) != &BLACK_PIXEL 
+    if img.get_pixel(first_black.0 + 4, first_black.1) == &BLACK_PIXEL 
+        && img.get_pixel(first_black.0 + 5, first_black.1 + 1) != &BLACK_PIXEL
     {
         return "6"
     }
