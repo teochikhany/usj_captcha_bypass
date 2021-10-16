@@ -429,5 +429,16 @@ mod captcha
         assert_eq!(result, "63124");
     }
 
+
+    #[test]
+    fn _9_04448()
+    {
+        let img = open(r".\captchas\9-04448.png").expect("can not find the image").into_rgb8();
+
+        let result = _main(img);
+
+        assert_eq!(result, "04448");
+    }
+
     
 }

@@ -1,1 +1,1 @@
-#z::Run D:\Documents\Rust Projects\usj_captcha_bypss\target\release\usj_captcha_bypas.exe  ; Win+Z
+#z::Run .\target\release\usj_captcha_bypas.exe  ; Win+Z
