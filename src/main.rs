@@ -174,6 +174,7 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32) -> &str
         40 => "8",
         29 => "5",
         35 => "4",
+        34 => "0",
         20 => or_0_7_4(img, iter),
         27 => or_1_2_4(img, iter),
         39 => or_9_6(img, iter),
@@ -439,6 +440,16 @@ mod captcha
         let result = _main(img);
 
         assert_eq!(result, "04448");
+    }
+
+    #[test]
+    fn _10_07692()
+    {
+        let img = open(r".\captchas\10-07692.png").expect("can not find the image").into_rgb8();
+
+        let result = _main(img);
+
+        assert_eq!(result, "07692");
     }
 
     
