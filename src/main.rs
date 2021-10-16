@@ -1,14 +1,15 @@
 extern crate image;
 
-
 use image::open;
 use std::fs::File;
 use std::io::prelude::*;
 use clipboard_win::{formats, get_clipboard};
 // use image::{RgbImage, Rgb, ImageFormat};
 
+/// just an alias to simplify image parameters
 type IMAGE = image::ImageBuffer<image::Rgb<u8>, std::vec::Vec<u8>>;
 
+/// what values represent a black pixel in the captcha
 const BLACK_PIXEL: image::Rgb<u8> = image::Rgb([51u8, 51u8, 51u8]);
 
 
@@ -121,6 +122,9 @@ fn read_image(img : &IMAGE) -> [u16; 5]
 }
 
 
+/// Getting the first black pixel, top -> down, left -> right
+/// in the specified section (iter: u32), each captcha is
+/// divided into 5 section, one for each number. 
 fn get_first_pixel(img: &IMAGE, iter:u32) -> (u32, u32)
 {
     let lower_bound = 10 + 20 * iter;
@@ -146,6 +150,7 @@ fn get_first_pixel(img: &IMAGE, iter:u32) -> (u32, u32)
 }
 
 
+/// Determening wich number is in the current section
 fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
 {
     match nb_black
@@ -172,7 +177,6 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32)
 
 fn or_0_7_4(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &BLACK_PIXEL 
@@ -194,7 +198,6 @@ fn or_0_7_4(img: &IMAGE, iter:u32)
 
 fn or_1_2_4(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 4, first_black.1 - 4) == &BLACK_PIXEL
@@ -211,14 +214,11 @@ fn or_1_2_4(img: &IMAGE, iter:u32)
     {
         println!("2 \t")
     }
-
-    // println!("either _ or 4 (1, 2)");
 }
 
 
 fn or_2_8(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 7, first_black.1 + 7) == &BLACK_PIXEL 
@@ -229,8 +229,6 @@ fn or_2_8(img: &IMAGE, iter:u32)
     {
         println!("8 \t")
     }
-
-    // println!("either _ or 8 (2)");
 }
 
 
@@ -243,7 +241,6 @@ fn or_3_9(img: &IMAGE, iter:u32)
 #[allow(unused_variables)]
 fn or_3_9_6(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 5, first_black.1) == &BLACK_PIXEL 
@@ -260,14 +257,11 @@ fn or_3_9_6(img: &IMAGE, iter:u32)
     {
         println!("3 \t")
     }
-
-    // println!("either 3 or 9 or _ (6)");
 }
 
 
 fn or_5_6(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0, first_black.1 + 4) == &BLACK_PIXEL 
@@ -279,14 +273,11 @@ fn or_5_6(img: &IMAGE, iter:u32)
     {
         println!("6 \t")
     }
-
-    // println!("either _ or 6 (5)");
 }
 
 
 fn or_3_8_7(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 5, first_black.1 + 4) == &BLACK_PIXEL 
@@ -302,14 +293,11 @@ fn or_3_8_7(img: &IMAGE, iter:u32)
     {
         println!("8 \t")
     }
-
-    // println!("either _ or 8 (3)");
 }
 
 
 fn or_9_6(img: &IMAGE, iter:u32)
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
     let first_black = get_first_pixel(img, iter);
 
     if img.get_pixel(first_black.0 + 6, first_black.1 + 1) != &BLACK_PIXEL 
@@ -320,6 +308,4 @@ fn or_9_6(img: &IMAGE, iter:u32)
     {
         println!("9 \t")
     }
-
-    // println!("either 9 or 6");
 }
