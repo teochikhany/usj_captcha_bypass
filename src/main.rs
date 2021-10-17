@@ -250,7 +250,17 @@ fn or_2_8(img: &IMAGE, iter:u32) -> &str
 #[allow(unused_variables)]
 fn or_3_9(img: &IMAGE, iter:u32) -> &str
 {
-    return "Y"
+    let first_black = get_first_pixel(img, iter);
+
+    if img.get_pixel(first_black.0, first_black.1 + 1) == &BLACK_PIXEL 
+        && img.get_pixel(first_black.0, first_black.1 + 2) != &BLACK_PIXEL
+    {
+        return "3"
+    }
+    else
+    {
+        return "9"
+    }
 }
 
 
