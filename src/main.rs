@@ -180,7 +180,7 @@ fn get_nb(nb_black : u16, img: &IMAGE, iter:u32) -> &str
         39 => or_9_6(img, iter),
         32 => or_2_8(img, iter),
         31 => or_3_9_6(img, iter),
-        22 => or_3_9(img, iter),
+        22 => or_3_9_1(img, iter),
         23 => or_5_6(img, iter),
         26 => or_3_8_7(img, iter),
         _ => { println!("unknows nb of black pixel: {}", nb_black); return "R" }
@@ -247,8 +247,7 @@ fn or_2_8(img: &IMAGE, iter:u32) -> &str
 }
 
 
-#[allow(unused_variables)]
-fn or_3_9(img: &IMAGE, iter:u32) -> &str
+fn or_3_9_1(img: &IMAGE, iter:u32) -> &str
 {
     let first_black = get_first_pixel(img, iter);
 
@@ -256,6 +255,11 @@ fn or_3_9(img: &IMAGE, iter:u32) -> &str
         && img.get_pixel(first_black.0, first_black.1 + 2) != &BLACK_PIXEL
     {
         return "3"
+    }
+    else if img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &BLACK_PIXEL 
+            && img.get_pixel(first_black.0 + 1, first_black.1) != &BLACK_PIXEL
+    {
+        return "1"
     }
     else
     {
@@ -470,6 +474,17 @@ mod captcha
         let result = _main(img);
 
         assert_eq!(result, "32628");
+    }
+
+
+    #[test]
+    fn _12_17770()
+    {
+        let img = open(r".\captchas\12-17770.png").expect("can not find the image").into_rgb8();
+
+        let result = _main(img);
+
+        assert_eq!(result, "17770");
     }
 
     
