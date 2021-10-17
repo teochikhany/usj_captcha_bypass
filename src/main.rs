@@ -51,83 +51,34 @@ fn main() {
 /// until 110 th row. The first 10 and last 10 rows are neglected
 fn read_image(img : &IMAGE) -> [u16; 5]
 {
-    // let black_pixel = image::Rgb([51u8, 51u8, 51u8]);
 
-    let mut first_nb:   u16 = 0;
-    let mut second_nb:  u16 = 0;
-    let mut third_nb:   u16 = 0;
-    let mut forth_nb:   u16 = 0;
-    let mut fifth_nb:   u16 = 0;
+    let mut result = [0u16; 5];
 
-    // first number
-    for i in 10 .. 30
+    for k in 0 .. 5
     {
-        for j in 0 .. 30
+        let lower_bound = 10 + 20 * k;
+        let upper_bound = lower_bound + 20;
+
+        for i in lower_bound .. upper_bound
         {
-            if img.get_pixel(i, j) == &BLACK_PIXEL
+            for j in 0 .. 30
             {
-                first_nb += 1;
+                if img.get_pixel(i, j) == &BLACK_PIXEL
+                {
+                    result[k as usize] += 1;
+                }
             }
         }
     }
 
-    // second number
-    for i in 30 .. 50
-    {
-        for j in 0 .. 30
-        {
-            if img.get_pixel(i, j) == &BLACK_PIXEL
-            {
-                second_nb += 1;
-            }
-        }
-    }
+    println!("first: {}", result[0]);
+    println!("second: {}", result[1]);
+    println!("third: {}", result[2]);
+    println!("forth: {}", result[3]);
+    println!("fifth: {} \n", result[4]);
 
-    // third number
-    for i in 50 .. 70
-    {
-        for j in 0 .. 30
-        {
-            if img.get_pixel(i, j) == &BLACK_PIXEL
-            {
-                third_nb += 1;
-            }
-        }
-    }
+    return result;
 
-    // forth number
-    for i in 70 .. 90
-    {
-        for j in 0 .. 30
-        {
-            if img.get_pixel(i, j) == &BLACK_PIXEL
-            {
-                forth_nb += 1;
-            }
-        }
-    }
-
-
-    // fifth number
-    for i in 90 .. 110
-    {
-        for j in 0 .. 30
-        {
-            if img.get_pixel(i, j) == &BLACK_PIXEL
-            {
-                // println!("{}, {}", i, j);
-                fifth_nb += 1;
-            }
-        }
-    }
-
-    println!("first: {}", first_nb);
-    println!("second: {}", second_nb);
-    println!("third: {}", third_nb);
-    println!("forth: {}", forth_nb);
-    println!("fifth: {} \n", fifth_nb);
-
-    return [first_nb, second_nb, third_nb, forth_nb, fifth_nb];
 }
 
 
