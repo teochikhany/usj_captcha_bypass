@@ -438,5 +438,15 @@ mod captcha
         assert_eq!(result, "17770");
     }
 
+
+    #[test]
+    fn _13_76923()
+    {
+        let img = open(r".\captchas\13-76923.png").expect("can not find the image").into_rgb8();
+
+        let result = _main(img);
+
+        assert_eq!(result, "76923");
+    }
     
 }
