@@ -208,7 +208,7 @@ fn or_3_9_1(img: &IMAGE, iter:u32) -> &str
         return "3"
     }
     else if img.get_pixel(first_black.0 + 1, first_black.1 - 1) == &BLACK_PIXEL 
-            && img.get_pixel(first_black.0 + 1, first_black.1) != &BLACK_PIXEL
+            && img.get_pixel(first_black.0, first_black.1 + 1) != &BLACK_PIXEL
     {
         return "1"
     }
